@@ -1,3 +1,7 @@
+require('dotenv').config();
+
+var video = process.env.VIDEO_URL;
+
 var http = require('http');
 var url = require('url');
 var fs = require('fs');
@@ -15,6 +19,7 @@ http
       }
       res.writeHead(200, { 'Content-Type': 'text/html' });
       res.write(data);
+      res.write(video);
       return res.end();
     });
   })
