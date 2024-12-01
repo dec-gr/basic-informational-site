@@ -1,26 +1,20 @@
 require('dotenv').config();
+const express = require('express');
+const app = express();
+const PORT = process.env.PORT || 3000;
 
-var video = process.env.VIDEO_URL;
+app.get('/', (req, res) => res.sendFile('index.html', { root: __dirname }));
 
-var http = require('http');
-var url = require('url');
-var fs = require('fs');
+app.get('/about', (req, res) =>
+  res.sendFile('about.html', { root: __dirname })
+);
 
-http
-  .createServer(function (req, res) {
-    var q = url.parse(req.url, true);
-    var path = q.pathname === '/' ? '/index' : q.pathname;
-    var filename = '.' + path + '.html';
-    console.log(filename);
-    fs.readFile(filename, function (err, data) {
-      if (err) {
-        res.writeHead(404, { 'Content-Type': 'text/html' });
-        return res.end('404 Not Found');
-      }
-      res.writeHead(200, { 'Content-Type': 'text/html' });
-      res.write(data);
-      res.write(video);
-      return res.end();
-    });
-  })
-  .listen(8080);
+app.get('/contact-me', (req, res) =>
+  res.sendFile('contact-me.html', { root: __dirname })
+);
+
+app.get('*', (req, res) => res.sendFile('404.html', { root: __dirname }));
+
+app.listen(PORT, () => {
+  console.log(`My first Express app - listening on port ${PORT}!`);
+});
